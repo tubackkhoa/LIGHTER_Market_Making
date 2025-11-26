@@ -23,6 +23,7 @@ from typing import Dict, Any
 from arch import arch_model
 
 PARAMS_DIR = os.getenv("PARAMS_DIR", "params")
+BASE_URL = os.getenv("BASE_URL", "https://mainnet.zklighter.elliot.ai")
 os.makedirs(PARAMS_DIR, exist_ok=True)
 
 PERIODS_TO_USE = 8
@@ -68,7 +69,7 @@ def running_in_docker() -> bool:
 def parse_arguments():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description='Calculate Avellaneda-Stoikov market making parameters')
-    parser.add_argument('ticker', nargs='?', default='PAXG', help='Ticker symbol (default: BTC)')
+    parser.add_argument('--ticker', nargs='?', default='PAXG', help='Ticker symbol (default: BTC)')
     parser.add_argument('--minutes', type=int, default=15, help='Frequency in minutes to recalculate parameters (default: 15)')
     return parser.parse_args()
 
@@ -95,8 +96,7 @@ async def _get_market_details_async(symbol: str) -> Tuple[Optional[int], float, 
     Falls back to a hardcoded price tick size if the API call fails.
     """
     api_client = None
-    try:
-        BASE_URL = "https://mainnet.zklighter.elliot.ai"
+    try:        
         api_client = lighter.ApiClient(configuration=lighter.Configuration(host=BASE_URL))
         order_api = lighter.OrderApi(api_client)
         order_books_response = await order_api.order_books()
