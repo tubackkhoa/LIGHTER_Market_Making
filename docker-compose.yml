@@ -17,6 +17,7 @@ services:
       - ./gather_lighter_data.py:/app/gather_lighter_data.py:ro
       - ./calculate_avellaneda_parameters.py:/app/calculate_avellaneda_parameters.py:ro
       - ./market_maker.py:/app/market_maker.py:ro
+      - ./signer_client.py:/usr/local/lib/python3.11/site-packages/lighter/signer_client.py
     env_file:
       - .env
     environment:
@@ -33,6 +34,7 @@ services:
       - ./logs:/app/logs
       - ./params:/app/params
       - ./calculate_avellaneda_parameters.py:/app/calculate_avellaneda_parameters.py:ro
+      - ./signer_client.py:/usr/local/lib/python3.11/site-packages/lighter/signer_client.py
     env_file:
       - .env
     environment:
@@ -62,6 +64,7 @@ services:
       - ./params:/app/params
       - ./logs:/app/logs
       - ./find_trend_lighter.py:/app/find_trend_lighter.py:ro
+      - ./signer_client.py:/usr/local/lib/python3.11/site-packages/lighter/signer_client.py
     env_file:
       - .env
     environment:
@@ -89,6 +92,7 @@ services:
       - ./params:/app/params:ro
       - ./logs:/app/logs
       - ./market_maker.py:/app/market_maker.py:ro
+      - ./signer_client.py:/usr/local/lib/python3.11/site-packages/lighter/signer_client.py
     env_file:
       - .env
     environment:
