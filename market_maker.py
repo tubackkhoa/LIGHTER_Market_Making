@@ -17,7 +17,7 @@ import signal
 from collections import deque
 import argparse
 from dotenv import load_dotenv
-import sys
+from distutils.util import strtobool
 
 # Load .env file
 load_dotenv()
@@ -30,6 +30,9 @@ WEBSOCKET_URL = BASE_URL.replace("http", "ws") + "/stream"
 API_KEY_PRIVATE_KEY = os.getenv("API_KEY_PRIVATE_KEY")
 ACCOUNT_INDEX = int(os.getenv("ACCOUNT_INDEX", "0"))
 API_KEY_INDEX = int(os.getenv("API_KEY_INDEX", "0"))
+
+FORCE_ANTI_TREND = bool(strtobool(os.getenv("FORCE_ANTI_TREND", "false")))
+
 
 MARKET_SYMBOL = os.getenv("MARKET_SYMBOL", "PAXG")
 MARKET_ID = None
@@ -253,6 +256,9 @@ def update_flip_target_from_supertrend(initial: bool = False) -> None:
 
     supertrend_issue_logged = False
     target_state = (trend == -1)
+    if FORCE_ANTI_TREND:
+        target_state = not target_state  # flip the trend
+        logger.info(f"🛡️ ANTI-TREND MODE: Đang flip ngược Supertrend từ {trend} → target {mode_label(target_state)}")
     if flip_target_state != target_state or initial:
         logger.info(
             f"🧭 Supertrend trend {trend:+d} detected → targeting {mode_label(target_state)} mode."
